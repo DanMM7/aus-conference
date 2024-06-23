@@ -462,6 +462,28 @@ body.mobile-nav-active #mobile-nav-toggle {
   color: #fff;
 }
 
+/* Flag Styling */
+.flag {
+  position: absolute;
+  z-index: 998; /* Ensure they are above other elements */
+  top: 50%;
+  transform: translateY(-50%); /* Center vertically */
+}
+
+.flag img {
+  width: auto;
+  height: 36px; /* Same height as the logo text */
+}
+
+.top-left {
+  left: 10px; /* Adjust distance from the left edge */
+}
+
+.top-right {
+  right: 10px; /* Adjust distance from the right edge */
+}
+
+
 /*--------------------------------------------------------------
 # Intro Section
 --------------------------------------------------------------*/
@@ -1213,6 +1235,10 @@ body.mobile-nav-active #mobile-nav-toggle {
 
 #buy-tickets {
   padding: 60px 0;
+  background: url(../img/subscribe-bg.jpg) center center no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  position: relative;
 }
 
 #buy-tickets .card {

@@ -483,6 +483,26 @@ body.mobile-nav-active #mobile-nav-toggle {
   right: 10px; /* Adjust distance from the right edge */
 }
 
+/* Mobile view adjustments */
+@media (max-width: 767px) {
+  .flag {
+    position: relative;
+    top: auto;
+    transform: none;
+    display: inline-block;
+    margin-left: 5px;
+  }
+
+  .flag.top-left {
+    display: none; /* Hide left flag */
+  }
+
+  .flag.top-right {
+    display: none;
+    float: right;
+    margin-right: 10px;
+  }
+}
 
 /*--------------------------------------------------------------
 # Intro Section

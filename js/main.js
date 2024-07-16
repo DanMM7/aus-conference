@@ -142,6 +142,29 @@ jQuery(document).ready(function( $ ) {
     modal.find('#ticket-type').val(ticketType);
   })
 
-// custom code
+  // Flag Slide animation
+  $(document).ready(function() {
+    function animateFlags() {
+        $(".flag").each(function(index) {
+            var flag = $(this);
+            var leftPos = index % 2 === 0 ? "-100%" : "100%"; // Start position for left and right flags
+            flag.css({ left: leftPos });
+
+            var animationDirection = index % 2 === 0 ? "100%" : "-100%"; // End position for left and right flags
+
+            function animate() {
+                flag.animate({ left: animationDirection }, 8000, "linear", function() {
+                    flag.css({ left: leftPos });
+                    animate();
+                });
+            }
+
+            animate();
+        });
+    }
+
+    animateFlags();
+  });
+
 
 });

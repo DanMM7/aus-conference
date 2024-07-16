@@ -153,7 +153,7 @@ jQuery(document).ready(function( $ ) {
             var animationDirection = index % 2 === 0 ? "100%" : "-100%"; // End position for left and right flags
 
             function animate() {
-                flag.animate({ left: animationDirection }, 8000, "linear", function() {
+                flag.animate({ left: animationDirection }, 9000, "linear", function() {
                     flag.css({ left: leftPos });
                     animate();
                 });
@@ -166,5 +166,79 @@ jQuery(document).ready(function( $ ) {
     animateFlags();
   });
 
+  // Contact page script
+  $(document).ready(function() {
+    $('#contactForm').submit(function(event) {
+        event.preventDefault();  // Prevent the default form submission
+
+        // Get form values
+        const name = $('#name').val();
+        const email = $('#email').val();
+        const phone = $('#phone').val();
+        const message = $('#message').val();
+
+        // Create the request payload
+        const payload = {
+            name: name,
+            email: email,
+            phone: phone,
+            message: message
+        };
+
+        // Send POST request to FastAPI endpoint
+        $.ajax({
+            url: 'http://127.0.0.1:8000/contact/',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(payload),
+            success: function(response) {
+                alert(response.message);  // Show success message
+            },
+            error: function(xhr, status, error) {
+                const errorMessage = xhr.status + ': ' + xhr.statusText;
+                alert('Error - ' + errorMessage);  // Show error message
+            }
+        });
+    });
+  });
+
+  // Single speaker page
+  $(document).ready(function() {
+    $('.speaker-link').click(function(event) {
+        event.preventDefault();
+        const speakerId = $(this).data('id');
+        localStorage.setItem('selectedSpeakerId', speakerId);
+        window.location.href = $(this).attr('href');
+    }); 
+  });
+
+  $(document).ready(function() {
+    const speakerId = localStorage.getItem('selectedSpeakerId');
+    if (speakerId) {
+        const speakers = {
+            1: { name: 'Eric Mwamba', bio: 'Stratège en Marketing territorial et développement Communautaire', img: 'img/speakers/1.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: '' } },
+            2: { name: 'Warda Belaribi', bio: 'Consultante en stratégie', img: 'img/speakers/2.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/warda-belaribi-9366248b/' } },
+            3: { name: 'Ferdos Osman', bio: 'Experte en levée des fonds et entrepreneur', img: 'img/speakers/3.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/ferdos-osman-027560249/' } },
+            // Add other speakers here...
+        };
+
+        const speaker = speakers[speakerId];
+        if (speaker) {
+            $('#speaker-img').attr('src', speaker.img);
+            $('#speaker-name').text(speaker.name);
+            $('#speaker-bio').text(speaker.bio);
+            $('#speaker-social').html(`
+                <a href="${speaker.social.twitter}"><i class="fa fa-twitter"></i></a>
+                <a href="${speaker.social.facebook}"><i class="fa fa-facebook"></i></a>
+                <a href="${speaker.social.googlePlus}"><i class="fa fa-google-plus"></i></a>
+                <a href="${speaker.social.linkedin}"><i class="fa fa-linkedin"></i></a>
+            `);
+        } else {
+            $('#speakers-details').html('<p>Speaker not found.</p>');
+        }
+    } else {
+        $('#speakers-details').html('<p>No speaker selected.</p>');
+    }
+  });
 
 });

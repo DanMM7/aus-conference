@@ -145,8 +145,7 @@ h6 {
 --------------------------------------------------------------*/
 
 #header {
-  height: 90px;
-  padding: 25px 0;
+  height: 120px;
   position: fixed;
   left: 0;
   top: 0;
@@ -158,8 +157,7 @@ h6 {
 #header.header-scrolled,
 #header.header-fixed {
   background: rgba(6, 12, 34, 0.98);
-  height: 70px;
-  padding: 15px 0;
+  height: 120px;
   transition: all 0.5s;
 }
 
@@ -188,6 +186,50 @@ h6 {
   margin: 0;
   max-height: 40px;
 }
+
+/* Top Navbar Styling */
+.container-top {
+  background: goldenrod;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.container-top .flag img {
+  height: 36px; /* Adjust as needed */
+  width: auto;
+}
+
+.container-top .flag {
+  display: inline-block;
+  position: relative;
+  z-index: 998; /* Ensure they are above other elements */
+  top: 17px;
+  transform: translateY(-50%); /* Center vertically */
+}
+
+.top-left {
+  left: 10px; /* Adjust distance from the left edge */
+}
+
+.top-right {
+  right: 10px; /* Adjust distance from the right edge */
+}
+
+
+/* Main Navbar Styling *
+.container {
+  background: rgba(6, 12, 34, 0.98);
+  height: 70px;
+  max-width: 100%;
+  /*display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  top: 50px;  Push main navbar below top navbar */
+
 
 /*--------------------------------------------------------------
 # Navigation Menu
@@ -256,7 +298,7 @@ h6 {
 
 #nav-menu-container {
   float: right;
-  margin: 0;
+  margin-top: 15px;
 }
 
 /* Nav Meu Styling */
@@ -361,7 +403,7 @@ h6 {
   right: 0;
   top: 0;
   z-index: 999;
-  margin: 15px 15px 0 0;
+  margin: 55px 15px 0 0;
   border: 0;
   background: none;
   font-size: 24px;
@@ -462,29 +504,22 @@ body.mobile-nav-active #mobile-nav-toggle {
   color: #fff;
 }
 
-/* Flag Styling */
-.flag {
-  position: absolute;
-  z-index: 998; /* Ensure they are above other elements */
-  top: 50%;
-  transform: translateY(-50%); /* Center vertically */
-}
-
-.flag img {
-  width: auto;
-  height: 36px; /* Same height as the logo text */
-}
-
-.top-left {
-  left: 10px; /* Adjust distance from the left edge */
-}
-
-.top-right {
-  right: 10px; /* Adjust distance from the right edge */
-}
-
 /* Mobile view adjustments */
 @media (max-width: 767px) {
+  .container-top {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+  }
+
+  .container {
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+  }
+
   .flag {
     position: relative;
     top: auto;
@@ -1640,8 +1675,26 @@ body.mobile-nav-active #mobile-nav-toggle {
   #header {
     background: rgba(6, 12, 34, 0.98);
     height: 70px;
-    padding: 15px 0;
     transition: all 0.5s;
+  }
+
+  .container-top {
+    height: 50px;
+    display: flex;
+    padding: 0 20px;
+  }
+
+  .container-top .flag img {
+    height: 36px; /* Adjust as needed */
+    width: auto;
+  }
+  
+  .container-top .flag {
+    display: inline-block;
+    position: relative;
+    z-index: 998; /* Ensure they are above other elements */
+    top: 17px;
+    transform: translateY(-50%); /* Center vertically */
   }
 
   #nav-menu-container {
@@ -1649,7 +1702,7 @@ body.mobile-nav-active #mobile-nav-toggle {
   }
 
   #mobile-nav-toggle {
-    display: inline;
+    display: block;
   }
 
   #intro .intro-container {

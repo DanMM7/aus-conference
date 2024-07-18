@@ -202,7 +202,7 @@ jQuery(document).ready(function( $ ) {
     });
   });
 
-  // Single speaker page
+  // Single speaker page script
   $(document).ready(function() {
     $('.speaker-link').click(function(event) {
         event.preventDefault();
@@ -212,6 +212,7 @@ jQuery(document).ready(function( $ ) {
     }); 
   });
 
+  // Detail speaker page script
   $(document).ready(function() {
     const speakerId = localStorage.getItem('selectedSpeakerId');
     if (speakerId) {
@@ -219,6 +220,15 @@ jQuery(document).ready(function( $ ) {
             1: { name: 'Eric Mwamba', bio: 'Stratège en Marketing territorial et développement Communautaire', img: 'img/speakers/1.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: '' } },
             2: { name: 'Warda Belaribi', bio: 'Consultante en stratégie', img: 'img/speakers/2.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/warda-belaribi-9366248b/' } },
             3: { name: 'Ferdos Osman', bio: 'Experte en levée des fonds et entrepreneur', img: 'img/speakers/3.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/ferdos-osman-027560249/' } },
+            4: { name: 'Eric Mwamba', bio: 'Stratège en Marketing territorial et développement Communautaire', img: 'img/speakers/4.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: '' } },
+            5: { name: 'Warda Belaribi', bio: 'Consultante en stratégie', img: 'img/speakers/5.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/warda-belaribi-9366248b/' } },
+            6: { name: 'Ferdos Osman', bio: 'Experte en levée des fonds et entrepreneur', img: 'img/speakers/6.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/ferdos-osman-027560249/' } },
+            7: { name: 'Eric Mwamba', bio: 'Stratège en Marketing territorial et développement Communautaire', img: 'img/speakers/7.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: '' } },
+            8: { name: 'Warda Belaribi', bio: 'Consultante en stratégie', img: 'img/speakers/8.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/warda-belaribi-9366248b/' } },
+            9: { name: 'Ferdos Osman', bio: 'Experte en levée des fonds et entrepreneur', img: 'img/speakers/9.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/ferdos-osman-027560249/' } },
+            10: { name: 'Eric Mwamba', bio: 'Stratège en Marketing territorial et développement Communautaire', img: 'img/speakers/10.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: '' } },
+            11: { name: 'Warda Belaribi', bio: 'Consultante en stratégie', img: 'img/speakers/11.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/warda-belaribi-9366248b/' } },
+            12: { name: 'Ferdos Osman', bio: 'Experte en levée des fonds et entrepreneur', img: 'img/speakers/12.jpg', social: { twitter: '', facebook: '', googlePlus: '', linkedin: 'https://www.linkedin.com/in/ferdos-osman-027560249/' } },
             // Add other speakers here...
         };
 
@@ -240,5 +250,7 @@ jQuery(document).ready(function( $ ) {
         $('#speakers-details').html('<p>No speaker selected.</p>');
     }
   });
+
+  //
 
 });

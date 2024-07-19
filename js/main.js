@@ -153,7 +153,7 @@ jQuery(document).ready(function( $ ) {
             var animationDirection = index % 2 === 0 ? "100%" : "-100%"; // End position for left and right flags
 
             function animate() {
-                flag.animate({ left: animationDirection }, 9000, "linear", function() {
+                flag.animate({ left: animationDirection }, 15000, "linear", function() {
                     flag.css({ left: leftPos });
                     animate();
                 });

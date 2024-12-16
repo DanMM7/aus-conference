@@ -22,10 +22,12 @@ import Footer from './components/FooterView.vue'
 
   <RouterView />-->
 
-<Header />
-<Intro />
-<RouterView />
-<Footer />
+  <Header />
+  <Intro />
+  <RouterView />
+  <Footer />
+
+  <a href="#" class="back-to-top"><i class="fa fa-angle-up"></i></a>
 </template>
 
 <style scoped>

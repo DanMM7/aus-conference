@@ -12,7 +12,7 @@ import Contact from '../components/sections/ContactSection.vue'
 
 <template>
     <About hostname="Eric Mwamba "/>
-    <Speaker />
+    <!--<Speaker />-->
     <Schedule />
     <Venue />
     <Gallery />

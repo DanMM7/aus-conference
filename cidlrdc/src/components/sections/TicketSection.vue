@@ -1,5 +1,100 @@
 <script lang="ts">
+import { defineComponent, ref } from 'vue';
+import stripePromise from '@/stripe';
 
+export default defineComponent({
+  name: 'BuyTickets',
+  setup() {
+    const tickets = ref([
+      {
+        type: 'standard',
+        title: 'Accès Standard',
+        price: 250,
+        benefits: [
+          'Lettre de confirmation par e-mail',
+          'Places assises régulières',
+          'Accès communautaire',
+          'Remise d\'un certificat de participant',
+        ],
+      },
+      {
+        type: 'early-bird',
+        title: 'Accès Anticipé',
+        price: 150,
+        benefits: [
+          'Tout en accès standard',
+          'Enregistrement anticipé',
+        ],
+      },
+      {
+        type: 'vip',
+        title: 'Accès VIP',
+        price: 500,
+        benefits: [
+          'Tout en accès Premium',
+          'Participation de groupe',
+          'Accès aux salons VIP',
+        ],
+      },
+    ]);
+
+    const selectedTicket = ref(null);
+    const formData = ref({
+      name: '',
+      email: '',
+      phone: '',
+    });
+
+    const openModal = (ticket: any) => {
+      selectedTicket.value = ticket;
+    };
+
+    const closeModal = () => {
+      selectedTicket.value = null;
+      formData.value = { name: '', email: '', phone: '' };
+    };
+
+    const processPayment = async () => {
+      const stripe = await stripePromise;
+
+      if (!stripe) {
+        console.error('Stripe is not initialized');
+        return;
+      }
+
+      // Simulate a payment session
+      const response = await fetch('/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ticketType: selectedTicket.value.type,
+          name: formData.value.name,
+          email: formData.value.email,
+        }),
+      });
+
+      const session = await response.json();
+
+      // Redirect to Stripe Checkout
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        console.error(result.error.message);
+      }
+    };
+
+    return {
+      tickets,
+      selectedTicket,
+      formData,
+      openModal,
+      closeModal,
+      processPayment,
+    };
+  },
+});
 </script>
 
 <template>
@@ -7,214 +102,110 @@
       Buy Ticket Section wow fadeInUp
     ============================-->
     <section id="buy-tickets" class="section-with-bg">
-      <div class="container">
-
-        <div class="section-header">
-          <h2 style="color: white;">Procurez-vous des billets</h2>
-          <p style="color: white;">Choisissez la catégorie de billet ci-dessous</p>
-        </div>
-
-
-        <div class="row">
-
-          <!-- Standard Tier -->
-          <div class="col-lg-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title text-muted text-uppercase text-center">Accès Standard</h5>
-                <h6 class="card-price text-center">$250</h6>
-                <hr>
-                <ul class="fa-ul">
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Lettre de confirmation par e-mail / format pdf</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Places assises régulières, Pause café et Badge participant.</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Accès communautaire, Accès aux ateliers et Remise d'un certificat de participant.</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès groupe</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès Premium</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès VIP</li>
-                </ul>
-                <hr>
-                <div class="text-center">
-                  <button type="button" class="btn" data-toggle="modal" data-target="#buy-ticket-modal" data-ticket-type="standard-access">Buy Tikect</button>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-          <!-- Early-Bird Tier -->
-          <div class="col-lg-4">
-            <div class="card mb-5 mb-lg-0">
-              <div class="card-body">
-                <h5 class="card-title text-muted text-uppercase text-center">Accès Anticipé</h5>
-                <h6 class="card-price text-center">$150</h6>
-                <hr>
-                <ul class="fa-ul">
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Tout en accès standard</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Enregistrement anticipé</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès groupe</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès Premium</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès VIP</li>
-                </ul>
-                <hr>
-                <div class="text-center">
-                  <button type="button" class="btn" data-toggle="modal" data-target="#buy-ticket-modal" data-ticket-type="early-bird-access">Buy Tikect</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Local Tier -->
-          <div class="col-lg-4">
-            <div class="card mb-5 mb-lg-0">
-              <div class="card-body">
-                <h5 class="card-title text-muted text-uppercase text-center">Accès Local</h5>
-                <h6 class="card-price text-center">$200</h6>
-                <hr>
-                <ul class="fa-ul">
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Tout en accès standard</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Remise locale</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès groupe</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès Premium</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès VIP</li>
-                </ul>
-                <hr>
-                <div class="text-center">
-                  <button type="button" class="btn" data-toggle="modal" data-target="#buy-ticket-modal" data-ticket-type="local-access">Buy Tikect</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-        
-        <br>
-
-        <div class="row">
-
-          <!-- Premium Tier -->
-          <div class="col-lg-4">
-            <div class="card mb-5 mb-lg-0">
-              <div class="card-body">
-                <h5 class="card-title text-muted text-uppercase text-center">Accès Premium</h5>
-                <h6 class="card-price text-center">$300</h6>
-                <hr>
-                <ul class="fa-ul">
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Everything in Standard Access</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Après l'événement, Siège sélectionné et Communication directe avec les organisateurs</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Assistance de notre personnel pour toute question pendant la conférence.</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Logo de l'organisation ajouté à notre liste de sponsors et laissez-passer pour les coulisses,</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Opportunités de rencontre (artistes, conférenciers ou autres invités spéciaux),</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès groupe</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès VIP</li>
-                </ul>
-                <hr>
-                <div class="text-center">
-                  <button type="button" class="btn" data-toggle="modal" data-target="#buy-ticket-modal" data-ticket-type="premium-access">Acheter un billet</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- VIP Tier -->
-          <div class="col-lg-4">
-            <div class="card mb-5 mb-lg-0">
-              <div class="card-body">
-                <h5 class="card-title text-muted text-uppercase text-center">Accès VIP</h5>
-                <h6 class="card-price text-center">$500</h6>
-                <hr>
-                <ul class="fa-ul">
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Tout en accès Premium</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Participation de groupe, prix spéciaux ou places attribuées (siège)</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Accès aux salons VIP, et entrée anticipée, zones de sièges exclusives.</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Services gratuits (nourriture et boissons).</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès groupe</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès Premium</li>
-                </ul>
-                <hr>
-                <div class="text-center">
-                  <button type="button" class="btn" data-toggle="modal" data-target="#buy-ticket-modal" data-ticket-type="vip-access">Acheter un billet</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Group Tier -->
-          <div class="col-lg-4">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title text-muted text-uppercase text-center">Accès groupe</h5>
-                <h6 class="card-price text-center">$200</h6>
-                <hr>
-                <ul class="fa-ul">
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Tout en accès standard</li>
-                  <li><span class="fa-li"><i class="fa fa-check"></i></span>Participation de groupe</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès Premium</li>
-                  <li class="text-muted"><span class="fa-li"><i class="fa fa-times"></i></span>Accès VIP</li>              
-                </ul>
-                <hr>
-                <div class="text-center">
-                  <button type="button" class="btn" data-toggle="modal" data-target="#buy-ticket-modal" data-ticket-type="group-access">Acheter un billet</button>
-                </div>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-
+    <div class="container">
+      <div class="section-header">
+        <h2 style="color: white;">Procurez-vous des billets</h2>
+        <p style="color: white;">Choisissez la catégorie de billet ci-dessous</p>
       </div>
 
-      <!-- Modal Order Form -->
-      <div id="buy-ticket-modal" class="modal fade">
+      <div class="row">
+        <div
+          class="col-lg-4"
+          v-for="ticket in tickets"
+          :key="ticket.type"
+        >
+          <div class="card mb-5 mb-lg-0">
+            <div class="card-body">
+              <h5 class="card-title text-muted text-uppercase text-center">
+                {{ ticket.title }}
+              </h5>
+              <h6 class="card-price text-center">{{ ticket.price }} $</h6>
+              <hr />
+              <ul class="fa-ul">
+                <li
+                  v-for="benefit in ticket.benefits"
+                  :key="benefit"
+                >
+                  <span class="fa-li"><i class="fa fa-check"></i></span>{{ benefit }}
+                </li>
+              </ul>
+              <hr />
+              <div class="text-center">
+                <button
+                  type="button"
+                  class="btn"
+                  @click="openModal(ticket)"
+                >
+                  Acheter un billet
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div
+        v-if="selectedTicket"
+        class="modal fade show"
+        style="display: block;"
+        tabindex="-1"
+        role="dialog"
+      >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Checkout</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <h4 class="modal-title">Pay for {{ selectedTicket.title }}</h4>
+              <button
+                type="button"
+                class="close"
+                aria-label="Close"
+                @click="closeModal"
+              >
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
-              <form method="POST" action="#">
+              <form @submit.prevent="processPayment">
                 <div class="form-group">
-                  <input type="text" class="form-control" name="your-name" placeholder="Your Name">
+                  <input
+                    type="text"
+                    v-model="formData.name"
+                    class="form-control"
+                    placeholder="Votre Nom"
+                    required
+                  />
                 </div>
                 <div class="form-group">
-                  <input type="email" class="form-control" name="your-email" placeholder="Your Email">
+                  <input
+                    type="email"
+                    v-model="formData.email"
+                    class="form-control"
+                    placeholder="Votre E-mail"
+                    required
+                  />
                 </div>
                 <div class="form-group">
-                  <input type="tel" class="form-control" name="your-phone" placeholder="Your Phone">
-                </div>
-                <div class="form-group">
-                  <select id="ticket-type" name="ticket-type" class="form-control" >
-                    <option value="">-- Select Your Ticket Type --</option>
-                    <option value="standard-access">Standard Access</option>
-                    <option value="local-access">Local Access</option>
-                    <option value="early-bird-access">Early-Bird Access</option>
-                    <option value="group-access">Group Access</option>
-                    <option value="premium-access">Premium Access</option>
-                    <option value="vip-access">VIP Access</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <input type="tel" class="form-control" name="your-phone" placeholder="Your Country">
-                </div>
-                <div class="form-group">
-                  <input type="tel" class="form-control" name="your-phone" placeholder="Your Organisation">
-                </div>
-                <div class="form-group">
-                  <input type="tel" class="form-control" name="your-phone" placeholder="Your Position">
+                  <input
+                    type="text"
+                    v-model="formData.phone"
+                    class="form-control"
+                    placeholder="Votre Téléphone"
+                    required
+                  />
                 </div>
                 <div class="text-center">
-                  <button type="submit" class="btn">Pay Now</button>
+                  <button type="submit" class="btn btn-primary">
+                    Pay Now
+                  </button>
                 </div>
               </form>
             </div>
-          </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-      </div><!-- /.modal -->
-
-    </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped>

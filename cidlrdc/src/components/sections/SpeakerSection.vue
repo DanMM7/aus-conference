@@ -172,40 +172,38 @@ export default defineComponent({
 
 
 <template>
-    <!--==========================
+  <!--==========================
       Speakers Section class="wow fadeInUp"
-    ============================-->
-    <section id="speakers">
-      <div class="container">
-        <div class="section-header">
-          <h2>Conférenciers d'événements</h2>
-          <p>Voici quelques-uns de nos conférenciers</p>
-        </div>
+  ============================-->
+  <section id="speakers">
+    <div class="container">
+      <div class="section-header">
+        <h2>Conférenciers d'événements</h2>
+        <p>Voici quelques-uns de nos conférenciers</p>
+      </div>
 
-
-        <div class="row">
-          <div class="col-lg-4 col-md-6" v-for="speaker in speakers" :key="speaker.id">
-            <div class="speaker">
-              <img :src="speaker.image" :alt="`Speaker ${speaker.id}`" class="img-fluid" />
-              <div class="details">
-                <h3>
-                  <a href="speaker-details.html" class="speaker-link" :data-id="speaker.id">{{ speaker.name }}</a>
-                </h3>
-                <p>{{ speaker.title }}</p>
-                <div class="social">
-                  <a :href="speaker.socialLinks.twitter"><i class="fa fa-twitter"></i></a>
-                  <a :href="speaker.socialLinks.facebook"><i class="fa fa-facebook"></i></a>
-                  <a :href="speaker.socialLinks.googlePlus"><i class="fa fa-google-plus"></i></a>
-                  <a :href="speaker.socialLinks.linkedin"><i class="fa fa-linkedin"></i></a>
-                </div>
+      <div class="row">
+        <div class="col-lg-4 col-md-6" v-for="speaker in speakers" :key="speaker.id">
+          <div class="speaker">
+            <img :src="speaker.image" :alt="`Speaker ${speaker.id}`" class="img-fluid" />
+            <div class="details">
+              <h3>
+                <!-- Link to the speaker details -->
+                <router-link :to="{ name: 'SpeakerDetail', params: { id: speaker.id }}">{{ speaker.name }}</router-link>
+              </h3>
+              <p>{{ speaker.title }}</p>
+              <div class="social">
+                <a :href="speaker.socialLinks.twitter"><i class="fa fa-twitter"></i></a>
+                <a :href="speaker.socialLinks.facebook"><i class="fa fa-facebook"></i></a>
+                <a :href="speaker.socialLinks.googlePlus"><i class="fa fa-google-plus"></i></a>
+                <a :href="speaker.socialLinks.linkedin"><i class="fa fa-linkedin"></i></a>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-
-    </section>
+    </div>
+  </section>
 </template>
 
 <style scoped>

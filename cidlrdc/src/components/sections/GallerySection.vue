@@ -74,7 +74,9 @@ export default defineComponent({
 
       <div v-for="gallery in galleries" :key="gallery.id">
         <div class="owl-carousel gallery-carousel" >
-          <a :href="gallery.link" class="venobox" data-gall="gallery-carousel"><img :src="gallery.image" :alt="`Gallery ${gallery.id}`"></a>
+          <a :href="gallery.link" class="venobox" data-gall="gallery-carousel">
+            <img :src="gallery.image" :alt="`Gallery ${gallery.id}`">
+          </a>
         </div>
       </div>
 

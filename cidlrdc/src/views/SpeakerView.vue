@@ -1,48 +1,86 @@
-<script setup lang="ts">
+<script lang="ts">
+import { defineComponent, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+interface Speaker {
+  id: number;
+  name: string;
+  title: string;
+  image: string;
+  socialLinks: {
+    twitter: string;
+    facebook: string;
+    googlePlus: string;
+    linkedin: string;
+  };
+}
+
+export default defineComponent({
+  name: 'SpeakerDetail',
+  setup() {
+    const route = useRoute();
+    const speakerId = Number(route.params.id);
+
+    const speakers: Speaker[] = [
+      {
+        id: 1,
+        name: 'Eric Mwamba',
+        title: 'Stratège en Marketing territorial et développement Communautaire',
+        image: '/src/assets/speakers/1.jpg',
+        socialLinks: {
+          twitter: 'https://twitter.com/example',
+          facebook: 'https://facebook.com/example',
+          googlePlus: 'https://plus.google.com/example',
+          linkedin: 'https://linkedin.com/example',
+        },
+      },
+      // Add more speakers
+    ];
+
+    // Find the speaker by ID
+    const speaker = ref<Speaker | undefined>(speakers.find((s) => s.id === speakerId));
+
+    return {
+      speaker,
+    };
+  },
+});
 </script>
 
 <template>
-  <main id="main" class="main-page">
-
-    <!--==========================
-      Speaker Details Section
+    <main id="main" class="main-page">
+  <!--==========================
+      Speaker Details Section class="wow fadeIn"
     ============================-->
-    <section id="speakers-details" class="wow fadeIn">
-      <div class="container">
-        <div class="section-header">
-          <h2>Speaker Details</h2>
-          <p>Praesentium ut qui possimus sapiente nulla.</p>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6">
-            <img src="@/assets/speakers/1.jpg" alt="Speaker 1" class="img-fluid">
-          </div>
-
-          <div class="col-md-6">
-            <div class="details">
-              <h2>Brenden Legros</h2>
-              <div class="social">
-                <a href=""><i class="fa fa-twitter"></i></a>
-                <a href=""><i class="fa fa-facebook"></i></a>
-                <a href=""><i class="fa fa-google-plus"></i></a>
-                <a href=""><i class="fa fa-linkedin"></i></a>
-              </div>
-              <p>Voluptatem perferendis sed assumenda voluptatibus. Laudantium molestiae sint. Doloremque odio dolore dolore sit. Quae labore alias ea omnis ex expedita sapiente molestias atque. Optio voluptas et.</p>
-
-              <p>Aboriosam inventore dolorem inventore nam est esse. Aperiam voluptatem nisi molestias laborum ut. Porro dignissimos eum. Tempore dolores minus unde est voluptatum incidunt ut aperiam.</p> 
-
-              <p>Et dolore blanditiis officiis non quod id possimus. Optio non commodi alias sint culpa sapiente nihil ipsa magnam. Qui eum alias provident omnis incidunt aut. Eius et officia corrupti omnis error vel quia omnis velit. In qui debitis autem aperiam voluptates unde sunt et facilis.</p>
-            </div>
-          </div>
-          
-        </div>
+  <section id="speakers-details">
+    <div class="container">
+      <div class="section-header">
+        <h2>Speaker Details</h2>
+        <p>Details about {{ speaker?.name }}</p>
       </div>
 
-    </section>
-
-  </main>
+      <div v-if="speaker" class="row">
+        <div class="col-md-6">
+          <img :src="speaker.image" :alt="speaker.name" class="img-fluid" />
+        </div>
+        <div class="col-md-6">
+          <div class="details">
+            <h2>{{ speaker.name }}</h2>
+            <p>{{ speaker.title }}</p>
+            <div class="social">
+              <a :href="speaker.socialLinks.twitter"><i class="fa fa-twitter"></i></a>
+              <a :href="speaker.socialLinks.facebook"><i class="fa fa-facebook"></i></a>
+              <a :href="speaker.socialLinks.googlePlus"><i class="fa fa-google-plus"></i></a>
+              <a :href="speaker.socialLinks.linkedin"><i class="fa fa-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 </template>
+
 
 <style>
   #speakers-details {

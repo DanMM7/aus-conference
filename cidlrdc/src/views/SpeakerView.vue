@@ -1,5 +1,4 @@
-<script>
-
+<script setup lang="ts">
 </script>
 
 <template>
@@ -17,7 +16,7 @@
 
         <div class="row">
           <div class="col-md-6">
-            <img src="../assets/img/speakers/1.jpg" alt="Speaker 1" class="img-fluid">
+            <img src="@/assets/speakers/1.jpg" alt="Speaker 1" class="img-fluid">
           </div>
 
           <div class="col-md-6">
@@ -46,11 +45,46 @@
 </template>
 
 <style>
-@media (min-width: 1024px) {
-  .about {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
+  #speakers-details {
+    padding: 60px 0;
   }
-}
+
+  #speakers-details .details h2 {
+    color: #112363;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  #speakers-details .details .social {
+    margin-bottom: 15px;
+  }
+
+  #speakers-details .details .social a {
+    background: #e9edfb;
+    color: #112363;
+    line-height: 1;
+    display: inline-block;
+    text-align: center;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    padding-top: 9px;
+  }
+
+  #speakers-details .details .social a:hover {
+    background: goldenrod;
+    color: #fff;
+  }
+
+  #speakers-details .details .social a i {
+    font-size: 18px;
+  }
+
+  #speakers-details .details p {
+    color: #112363;
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
 </style>

@@ -1,7 +1,43 @@
-<script setup lang="ts">
-//defineProps<{
-//  msg: string
-//}>()
+<script lang="ts">
+  import FlagAnimation from '../elements/Flags.vue'
+  //import Translate from '../elements/Translate.vue'
+  import { defineComponent, ref, onMounted, onUnmounted, RouterLink } from 'vue';
+
+export default defineComponent({
+  name: 'Header',
+  components: {
+    FlagAnimation, // Register the FlagAnimation component
+  },
+  setup() {
+    const isScrolled = ref(false);
+
+    const onScroll = () => {
+      isScrolled.value = window.scrollY > 100;
+    };
+
+    onMounted(() => {
+      window.addEventListener('scroll', onScroll);
+
+      // Initial check in case the page is loaded scrolled down
+      isScrolled.value = window.scrollY > 100;
+    });
+
+    const translateContent = () => {
+      // Logic to toggle language goes here
+      console.log('Language translation triggered!');
+    };
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', onScroll);
+    });
+
+    return {
+      isScrolled,
+      translateContent,
+    };
+  },
+});
+
 </script>
 
 <template>
@@ -10,32 +46,29 @@
   ============================-->
   <header id="header">
     <!-- Top Navbar -->
-    <div class="container-top">
-        <!-- Add flag divs -->
-        <div class="flag top-left"><img src="@/assets/drc.gif" alt="Flag 1"></div>
-        <div class="flag top-right"><img src="@/assets/aus.gif" alt="Flag 2"></div>
-    </div>
+    <FlagAnimation />
+
     <!-- Main Navbar -->
-    <div class="container">
+    <div id="header" :class="{ 'header-scrolled': isScrolled }">
+      <div class="container">
         <div id="logo" class="pull-left">
-            <!-- Uncomment below if you prefer to use a text logo -->
-            <h1><a href="index.html">CID145T</a></h1>
-            <!-- <a href="#intro" class="scrollto"><img src="img/logo.png" alt="" title="CIDLRD"></a> -->
+          <h1><RouterLink to="/">CID145T</RouterLink></h1>
         </div>
         <nav id="nav-menu-container">
-            <ul class="nav-menu">
-                <li class="menu-active"><a href="#intro">Accueil</a></li>
-                <li><a href="#about">À propos</a></li>
-                <li><a href="#speakers">Conférenciers</a></li>
-                <li><a href="#schedule">Calendrier</a></li>
-                <li><a href="#venue">Lieu</a></li>
-                <li><a href="#gallery">Galerie</a></li>
-                <li><a href="#sponsors">Sponsors</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li class="buy-tickets"><a href="#buy-tickets">S'inscrire</a></li>
-                <li><a onclick="translateContent()" href="#">FR</a></li>
-            </ul>
+          <ul class="nav-menu">
+            <li class="menu-active"><a href="#intro">Accueil</a></li>
+            <li><a href="#about">À propos</a></li>
+            <li><a href="#speakers">Conférenciers</a></li>
+            <li><a href="#schedule">Calendrier</a></li>
+            <li><a href="#venue">Lieu</a></li>
+            <li><a href="#gallery">Galerie</a></li>
+            <li><a href="#sponsors">Sponsors</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li class="buy-tickets"><a href="#buy-tickets">S'inscrire</a></li>
+            <li><a @click.prevent="translateContent" href="#">FR</a></li>
+          </ul>
         </nav>
+      </div>
     </div>
   </header>
   <!-- #header -->
@@ -91,7 +124,7 @@
   height: 120px;
   position: fixed;
   left: 0;
-  top: 0;
+  top: 40;
   right: 0;
   transition: all 0.5s;
   z-index: 997;
@@ -100,7 +133,7 @@
 #header.header-scrolled,
 #header.header-fixed {
   background: rgba(6, 12, 34, 0.98);
-  height: 120px;
+  height: 60px;
   transition: all 0.5s;
 }
 
@@ -128,37 +161,6 @@
   padding: 0;
   margin: 0;
   max-height: 40px;
-}
-
-/* Top Navbar Styling */
-.container-top {
-  background: goldenrod;
-  height: 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
-}
-
-.container-top .flag img {
-  height: 36px; /* Adjust as needed */
-  width: auto;
-}
-
-.container-top .flag {
-  display: inline-block;
-  position: relative;
-  z-index: 998; /* Ensure they are above other elements */
-  top: 17px;
-  transform: translateY(-50%); /* Center vertically */
-}
-
-.top-left {
-  left: 10px; /* Adjust distance from the left edge */
-}
-
-.top-right {
-  right: 10px; /* Adjust distance from the right edge */
 }
 
 

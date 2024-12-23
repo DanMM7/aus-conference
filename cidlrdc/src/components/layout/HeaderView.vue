@@ -1,39 +1,61 @@
 <script lang="ts">
   import FlagAnimation from '../elements/Flags.vue'
-  //import Translate from '../elements/Translate.vue'
-  import { defineComponent, ref, onMounted, onUnmounted, RouterLink } from 'vue';
+  import TranslateButton from '../elements/Translate.vue'
+  import { defineComponent, reactive, onMounted, RouterLink } from 'vue';
 
 export default defineComponent({
   name: 'Header',
   components: {
-    FlagAnimation, // Register the FlagAnimation component
+    FlagAnimation, TranslateButton
   },
   setup() {
-    const isScrolled = ref(false);
+    const isScrolled = reactive({ value: false });
 
     const onScroll = () => {
       isScrolled.value = window.scrollY > 100;
     };
 
-    onMounted(() => {
-      window.addEventListener('scroll', onScroll);
-
-      // Initial check in case the page is loaded scrolled down
-      isScrolled.value = window.scrollY > 100;
+    const translations = reactive({
+      currentLanguage: 'en',
+      content: {
+        en: {
+          intro: 'Welcome',
+          about: 'About',
+          speakers: 'Speakers',
+          schedule: 'Schedule',
+          venue: 'Venue',
+          gallery: 'Gallery',
+          sponsors: 'Sponsors',
+          contact: 'Contact',
+          buyTickets: 'Buy Tickets',
+        },
+        fr: {
+          intro: 'Accueil',
+          about: 'À propos',
+          speakers: 'Conférenciers',
+          schedule: 'Calendrier',
+          venue: 'Lieu',
+          gallery: 'Galerie',
+          sponsors: 'Sponsors',
+          contact: 'Contact',
+          buyTickets: "S'inscrire",
+        },
+      },
     });
 
-    const translateContent = () => {
-      // Logic to toggle language goes here
-      console.log('Language translation triggered!');
+    const updateLanguage = (language: string) => {
+      translations.currentLanguage = language;
     };
 
-    onUnmounted(() => {
-      window.removeEventListener('scroll', onScroll);
+    onMounted(() => {
+      window.addEventListener('language-changed', (event: any) => {
+        updateLanguage(event.detail.language);
+      });
     });
 
     return {
       isScrolled,
-      translateContent,
+      translations: translations.content[translations.currentLanguage],
     };
   },
 });
@@ -52,25 +74,26 @@ export default defineComponent({
     <div id="header" :class="{ 'header-scrolled': isScrolled }">
       <div class="container">
         <div id="logo" class="pull-left">
-          <h1><RouterLink to="/">CID145T</RouterLink></h1>
+          <h1><a href="/">CID145T</a></h1>
         </div>
         <nav id="nav-menu-container">
           <ul class="nav-menu">
-            <li class="menu-active"><a href="#intro">Accueil</a></li>
-            <li><a href="#about">À propos</a></li>
-            <li><a href="#speakers">Conférenciers</a></li>
-            <li><a href="#schedule">Calendrier</a></li>
-            <li><a href="#venue">Lieu</a></li>
-            <li><a href="#gallery">Galerie</a></li>
-            <li><a href="#sponsors">Sponsors</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li class="buy-tickets"><a href="#buy-tickets">S'inscrire</a></li>
-            <li><a @click.prevent="translateContent" href="#">FR</a></li>
+            <li><a href="#intro">{{ translations.intro }}</a></li>
+            <li><a href="#about">{{ translations.about }}</a></li>
+            <li><a href="#speakers">{{ translations.speakers }}</a></li>
+            <li><a href="#schedule">{{ translations.schedule }}</a></li>
+            <li><a href="#venue">{{ translations.venue }}</a></li>
+            <li><a href="#gallery">{{ translations.gallery }}</a></li>
+            <li><a href="#sponsors">{{ translations.sponsors }}</a></li>
+            <li><a href="#contact">{{ translations.contact }}</a></li>
+            <li class="buy-tickets"><a href="#buy-tickets">{{ translations.buyTickets }}</a></li>
+            <li><TranslateButton /></li>
           </ul>
         </nav>
       </div>
     </div>
   </header>
+  <br>
   <!-- #header -->
 </template>
 
